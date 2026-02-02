@@ -1,0 +1,39 @@
+#version: '3.8'
+
+services:
+  vllm-inference:
+    # 환경 변수를 사용하여 이미지 태그 지정
+    image: nvcr.io/nvidia/vllm:${LATEST_VLLM_VERSION}
+    container_name: vllm-gtp-oss-20b
+    shm_size: '16gb'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "4242:8000"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      - vllm-hf-cache:/root/.cache/huggingface
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    ipc: host
+    # 명령행 인자에서 환경 변수 활용
+    command: >
+      vllm serve "${MODEL_NAME}"
+      --dtype auto
+      --max-model-len ${MAX_MODEL_LEN}
+      --gpu-memory-utilization ${GPU_MEM_UTIL}
+      --enforce-eager
+      --trust-remote-code
+    restart: unless-stopped
+
+volumes:
+  vllm-hf-cache:
+    external: true
