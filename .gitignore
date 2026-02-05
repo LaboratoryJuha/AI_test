@@ -41,3 +41,4 @@
 *.dwo
 .venv
 __pycache__
+.vscode
