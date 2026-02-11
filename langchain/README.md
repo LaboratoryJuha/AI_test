@@ -1,12 +1,15 @@
 # Langchain
 
+## step 1. vllm 호출 준비
+ex) vllm.py
 
-## step 1. 문서준비
+
+## step 2. 문서준비
 ex) prepare_documents.py
 
 
-## step 2. 텍스트 분할 (chunk 단위로 벡터화, overlap 크기 설정)
-ex) 
+## step 3. 텍스트 분할 (chunk 단위로 벡터화, overlap 크기 설정)
+ex) local_rag.py
 
 # Reference
 ```python
